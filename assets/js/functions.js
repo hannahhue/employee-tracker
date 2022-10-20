@@ -49,40 +49,58 @@ function startPrompts() {
 
 function viewDepartments() {
   db.query(
-    `SELECT depatment.department_name AS department
+    `SELECT department.department_name AS department
     FROM department`,
     function (err, results) {
       if (err) {
         console.error(err);
       }
       console.table(results);
+      startPrompts();
     }
   );
 }
 
 function viewRoles() {
-  db.query(`SELECT employee_role.
-    `);
+  db.query(
+    `SELECT employee_role.title AS employee_role FROM employee_role`,
+    function (err, results) {
+      if (err) {
+        console.error(err);
+      }
+      console.table(results);
+      startPrompts();
+    }
+  );
 }
 
 function viewEmployees() {
-  db.query(`SELECT 
-    `);
+  db.query(
+    `SELECT employee.first_name AS first,
+    employee.last_name AS last`,
+    function (err, results) {
+      if (err) {
+        console.error(err);
+      }
+      console.table(results);
+      startPrompts();
+    }
+  );
 }
 
-function addDepartments() {
-  db.query(`SELECT 
-    `);
-}
+// function addDepartments() {
+//   db.query(`SELECT
+//     `);
+// }
 
-function addRoles() {
-  db.query(`SELECT 
-    `);
-}
+// function addRoles() {
+//   db.query(`SELECT
+//     `);
+// }
 
-function addEmployees() {
-  db.query(`SELECT 
-    `);
-}
+// function addEmployees() {
+//   db.query(`SELECT
+//     `);
+//}
 
 module.exports = { startPrompts };
