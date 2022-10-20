@@ -12,6 +12,7 @@ const db = mysql.createConnection(
   console.log(`Connected to the employee database.`)
 );
 
+//creates list, always returns back here after prompts
 function startPrompts() {
   inquirer
     .prompt({
@@ -29,6 +30,7 @@ function startPrompts() {
       message: "Where would you like to go?",
       name: "directory",
     })
+    //giving direction to choice (what function to start)
     .then((response) => {
       if (response.directory === "View Departments") {
         viewDepartments();
@@ -50,10 +52,13 @@ function startPrompts() {
     });
 }
 
+//when selected view depart function start
 function viewDepartments() {
+  //grabs all department table
   db.query(
     `SELECT department.department_name AS department
     FROM department`,
+    //catch error or go back to home list
     function (err, results) {
       if (err) {
         console.error(err);
@@ -64,7 +69,10 @@ function viewDepartments() {
   );
 }
 
+//when selected view roles function start
 function viewRoles() {
+  //grabs all roles from employee_roles,
+  //and grabs from the other table with join
   db.query(
     `SELECT employee_role.title AS role,
     department.department_name AS department,
@@ -72,6 +80,7 @@ function viewRoles() {
     FROM employee_role
     INNER JOIN department
     ON employee_role.department_id = department.id`,
+    //catch error or return home list
     function (err, results) {
       if (err) {
         console.error(err);
@@ -82,7 +91,9 @@ function viewRoles() {
   );
 }
 
+//when selecting view employees
 function viewEmployees() {
+  //grabs all employee table and from other two tables
   db.query(
     `SELECT employee.first_name AS first,
     employee.last_name AS last,
@@ -95,6 +106,7 @@ function viewEmployees() {
     INNER JOIN employee_role
     ON employee.role_id = employee_role.id
     `,
+    //catch error or return home list
     function (err, results) {
       if (err) {
         console.error(err);
@@ -105,7 +117,9 @@ function viewEmployees() {
   );
 }
 
+//when selecting to add a department
 function addDepartments() {
+  //request info
   inquirer
     .prompt({
       type: "input",
@@ -113,9 +127,11 @@ function addDepartments() {
       name: "departmentName",
     })
     .then((response) => {
+      //take info givin and input into the values in seeds & show updated list
       db.query(
         `INSERT INTO department(department_name)
         VALUES ("${response.departmentName}")`,
+        //catch error or return home list
         function (err, result) {
           if (err) {
             console.log(err);
@@ -126,7 +142,9 @@ function addDepartments() {
     });
 }
 
+//when selecting to add new role
 function addRoles() {
+  //request info prompt
   inquirer
     .prompt([
       {
@@ -146,9 +164,11 @@ function addRoles() {
       },
     ])
     .then((response) => {
+      //takes info and inputs into seed values
       db.query(
         `INSERT INTO employee_role(title, salary, department_id)
           VALUES ("${response.roleName}", ${response.salary}, ${response.departmentName})`,
+        //catch error or return home list & show updated list
         function (err, result) {
           if (err) {
             console.log(err);
@@ -159,7 +179,9 @@ function addRoles() {
     });
 }
 
+//when u select to add a new employee
 function addEmployees() {
+  //request info prompts
   inquirer
     .prompt([
       {
@@ -184,9 +206,11 @@ function addEmployees() {
       },
     ])
     .then((response) => {
+      //takes info and inputs it into the employee value seeds
       db.query(
         `INSERT INTO employee (first_name, last_name, role_id, manager_id)
         VALUES ("${response.firstName}", "${response.lastName}", ${response.roleName},${response.manId})`,
+        //catch error or return updated table and home list
         function (err, result) {
           if (err) {
             console.log(err);
@@ -197,7 +221,9 @@ function addEmployees() {
     });
 }
 
+//if u chose to edit a employee
 function editEmployee() {
+  //request info
   inquirer
     .prompt([
       {
@@ -212,10 +238,12 @@ function editEmployee() {
       },
     ])
     .then((response) => {
+      //update the role id per the employee id given
       db.query(
         `UPDATE employee
         SET role_id = ${response.roleId}
         WHERE employee.id = ${response.employeeId}`,
+        //catch error or view updates and return to home list
         function (err, result) {
           if (err) {
             console.log(err);
@@ -226,4 +254,5 @@ function editEmployee() {
     });
 }
 
+//interact with index.js
 module.exports = { startPrompts };
