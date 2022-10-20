@@ -23,6 +23,7 @@ function startPrompts() {
         "Add Departments",
         "Add Roles",
         "Add Employees",
+        "Update Existing Employee",
         "Exit",
       ],
       message: "Where would you like to go?",
@@ -41,6 +42,8 @@ function startPrompts() {
         addRoles();
       } else if (response.directory === "Add Employees") {
         addEmployees();
+      } else if (response.directory === "Update Existing Employee") {
+        editEmployee();
       } else {
         process.exit();
       }
@@ -184,6 +187,35 @@ function addEmployees() {
       db.query(
         `INSERT INTO employee (first_name, last_name, role_id, manager_id)
         VALUES ("${response.firstName}", "${response.lastName}", ${response.roleName},${response.manId})`,
+        function (err, result) {
+          if (err) {
+            console.log(err);
+          }
+          viewEmployees();
+        }
+      );
+    });
+}
+
+function editEmployee() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What is the Employees ID?",
+        name: "employeeId",
+      },
+      {
+        type: "input",
+        message: "What is their new Role ID?",
+        name: "roleId",
+      },
+    ])
+    .then((response) => {
+      db.query(
+        `UPDATE employee
+        SET role_id = ${response.roleId}
+        WHERE employee.id = ${response.employeeId}`,
         function (err, result) {
           if (err) {
             console.log(err);

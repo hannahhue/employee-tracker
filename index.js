@@ -2,6 +2,7 @@
 const mysql = require("mysql2");
 const { startPrompts } = require("./assets/js/functions");
 
+//insital start created cute header
 function init() {
   console.log(`
                                                                      
@@ -12,7 +13,7 @@ function init() {
               |_|       |___|                                 
               
   `);
-
+  //calls console log prompts
   startPrompts();
 }
 
