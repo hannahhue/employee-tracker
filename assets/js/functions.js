@@ -82,12 +82,13 @@ function viewRoles() {
 function viewEmployees() {
   db.query(
     `SELECT employee.first_name AS first,
-    employee.last_name AS last
-    employee_role.title AS role
-    department.department_name AS department
+    employee.last_name AS last,
+    employee_role.title AS role,
+    employee_role.salary AS salary,
+    employee.first_name AS manager
     FROM employee
-    INNER JOIN department
-    ON employee.department_id = department.id,
+    LEFT JOIN employee man
+    ON employee.manager_id = man.id
     INNER JOIN employee_role
     ON employee.role_id = employee_role.id
     `,
