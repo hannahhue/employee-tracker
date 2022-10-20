@@ -85,7 +85,7 @@ function viewEmployees() {
     employee.last_name AS last,
     employee_role.title AS role,
     employee_role.salary AS salary,
-    employee.first_name AS manager
+    man.first_name AS manager
     FROM employee
     LEFT JOIN employee man
     ON employee.manager_id = man.id
@@ -112,7 +112,7 @@ function addDepartments() {
     .then((response) => {
       db.query(
         `INSERT INTO department(department_name)
-        VALUES (${response.departmentName})`,
+        VALUES ("${response.departmentName}")`,
         function (err, result) {
           if (err) {
             console.log(err);
@@ -125,7 +125,7 @@ function addDepartments() {
 
 function addRoles() {
   inquirer
-    .prompt(
+    .prompt([
       {
         type: "input",
         message: "What is your Role?",
@@ -133,19 +133,19 @@ function addRoles() {
       },
       {
         type: "input",
-        message: "What is your Department?",
+        message: "What is your Department ID?",
         name: "departmentName",
       },
       {
         type: "input",
         message: "What is your Salary?",
         name: "salary",
-      }
-    )
+      },
+    ])
     .then((response) => {
       db.query(
         `INSERT INTO employee_role(title, salary, department_id)
-          VALUES (${response.roleName}, ${response.departmentName}, ${response.salary})`,
+          VALUES ("${response.roleName}", ${response.salary}, ${response.departmentName})`,
         function (err, result) {
           if (err) {
             console.log(err);
@@ -158,7 +158,7 @@ function addRoles() {
 
 function addEmployees() {
   inquirer
-    .prompt(
+    .prompt([
       {
         type: "input",
         message: "What is your First Name?",
@@ -171,19 +171,19 @@ function addEmployees() {
       },
       {
         type: "input",
-        message: "What is your Role?",
+        message: "What is your Role ID?",
         name: "roleName",
       },
       {
         type: "input",
         message: "What is your Manager's ID?",
         name: "manId",
-      }
-    )
+      },
+    ])
     .then((response) => {
       db.query(
         `INSERT INTO employee (first_name, last_name, role_id, manager_id)
-        VALUES (${response.firstName}, ${response.lastName}, ${response.roleName},${response.manId})`,
+        VALUES ("${response.firstName}", "${response.lastName}", ${response.roleName},${response.manId})`,
         function (err, result) {
           if (err) {
             console.log(err);
