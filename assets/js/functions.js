@@ -63,7 +63,12 @@ function viewDepartments() {
 
 function viewRoles() {
   db.query(
-    `SELECT employee_role.title AS employee_role FROM employee_role`,
+    `SELECT employee_role.title AS role,
+    department.department_name AS department,
+    employee_role.salary AS salary
+    FROM employee_role
+    INNER JOIN department
+    ON employee_role.department_id = department.id`,
     function (err, results) {
       if (err) {
         console.error(err);
@@ -77,7 +82,15 @@ function viewRoles() {
 function viewEmployees() {
   db.query(
     `SELECT employee.first_name AS first,
-    employee.last_name AS last`,
+    employee.last_name AS last
+    employee_role.title AS role
+    department.department_name AS department
+    FROM employee
+    INNER JOIN department
+    ON employee.department_id = department.id,
+    INNER JOIN employee_role
+    ON employee.role_id = employee_role.id
+    `,
     function (err, results) {
       if (err) {
         console.error(err);
@@ -88,19 +101,60 @@ function viewEmployees() {
   );
 }
 
-// function addDepartments() {
-//   db.query(`SELECT
-//     `);
-// }
+function addDepartments() {
+  inquirer.prompt({
+    type: "input",
+    message: "What is your Department?",
+    name: "departmentName",
+  });
+  startPrompts();
+}
 
-// function addRoles() {
-//   db.query(`SELECT
-//     `);
-// }
+function addRoles() {
+  inquirer.prompt(
+    {
+      type: "input",
+      message: "What is your Role?",
+      name: "roleName",
+    },
+    {
+      type: "input",
+      message: "What is your Department?",
+      name: "departmentName",
+    },
+    {
+      type: "input",
+      message: "What is your Salary?",
+      name: "salary",
+    }
+  );
+  startPrompts();
+}
 
-// function addEmployees() {
-//   db.query(`SELECT
-//     `);
-//}
+function addEmployees() {
+  inquirer.prompt(
+    {
+      type: "input",
+      message: "What is your First Name?",
+      name: "firstName",
+    },
+    {
+      type: "input",
+      message: "What is your Last Name?",
+      name: "lastName",
+    },
+    {
+      type: "input",
+      message: "What is your Role?",
+      name: "roleName",
+    },
+    {
+      type: "input",
+      message: "What is your Manager's ID?",
+      name: "manId",
+    }
+  );
+  startPrompts();
+}
 
 module.exports = { startPrompts };
