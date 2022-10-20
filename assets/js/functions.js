@@ -103,59 +103,95 @@ function viewEmployees() {
 }
 
 function addDepartments() {
-  inquirer.prompt({
-    type: "input",
-    message: "What is your Department?",
-    name: "departmentName",
-  });
-  startPrompts();
-}
-
-function addRoles() {
-  inquirer.prompt(
-    {
-      type: "input",
-      message: "What is your Role?",
-      name: "roleName",
-    },
-    {
+  inquirer
+    .prompt({
       type: "input",
       message: "What is your Department?",
       name: "departmentName",
-    },
-    {
-      type: "input",
-      message: "What is your Salary?",
-      name: "salary",
-    }
-  );
-  startPrompts();
+    })
+    .then((response) => {
+      db.query(
+        `INSERT INTO department(department_name)
+        VALUES (${response.departmentName})`,
+        function (err, result) {
+          if (err) {
+            console.log(err);
+          }
+          viewDepartments();
+        }
+      );
+    });
+}
+
+function addRoles() {
+  inquirer
+    .prompt(
+      {
+        type: "input",
+        message: "What is your Role?",
+        name: "roleName",
+      },
+      {
+        type: "input",
+        message: "What is your Department?",
+        name: "departmentName",
+      },
+      {
+        type: "input",
+        message: "What is your Salary?",
+        name: "salary",
+      }
+    )
+    .then((response) => {
+      db.query(
+        `INSERT INTO employee_role(title, salary, department_id)
+          VALUES (${response.roleName}, ${response.departmentName}, ${response.salary})`,
+        function (err, result) {
+          if (err) {
+            console.log(err);
+          }
+          viewRoles();
+        }
+      );
+    });
 }
 
 function addEmployees() {
-  inquirer.prompt(
-    {
-      type: "input",
-      message: "What is your First Name?",
-      name: "firstName",
-    },
-    {
-      type: "input",
-      message: "What is your Last Name?",
-      name: "lastName",
-    },
-    {
-      type: "input",
-      message: "What is your Role?",
-      name: "roleName",
-    },
-    {
-      type: "input",
-      message: "What is your Manager's ID?",
-      name: "manId",
-    }
-  );
-  startPrompts();
+  inquirer
+    .prompt(
+      {
+        type: "input",
+        message: "What is your First Name?",
+        name: "firstName",
+      },
+      {
+        type: "input",
+        message: "What is your Last Name?",
+        name: "lastName",
+      },
+      {
+        type: "input",
+        message: "What is your Role?",
+        name: "roleName",
+      },
+      {
+        type: "input",
+        message: "What is your Manager's ID?",
+        name: "manId",
+      }
+    )
+    .then((response) => {
+      db.query(
+        `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+        VALUES (${response.firstName}, ${response.lastName}, ${response.roleName},${response.manId})`,
+        function (err, result) {
+          if (err) {
+            console.log(err);
+          }
+          viewEmployees();
+        }
+      );
+    });
 }
 
 module.exports = { startPrompts };
