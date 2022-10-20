@@ -20,7 +20,7 @@ select from the list and view, add or edit!
 
 Hannahhue Github: https://github.com/hannahhue/employee-tracker
 
-Watch link:
+Watch link: https://watch.screencastify.com/v/K7lrtkga2h6wkGRFWuoX
 
 ## License
 
